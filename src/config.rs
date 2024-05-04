@@ -17,7 +17,7 @@ pub struct GeneralConfig {
     pub log_level: String,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct SerialDeviceConfig {
     pub device_name: String,
     pub port: String,

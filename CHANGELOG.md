@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - TCP Handler (Tokio Async Library)
 - Initial UML/Diagram drawio to illustrate application
 
+#### Fix
+- Added clone to config::SerialDeviceConfig
+
 ## [0.2.0] - 2024-05-04
 
 ### Added
