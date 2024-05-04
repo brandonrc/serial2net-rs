@@ -67,5 +67,43 @@ fn main() -> Result<()> {
         // Add logic here if you need to detach the process or handle it like a daemon/service
     }
 
+
+    // Vector to hold our connection tasks
+    let mut connections = Vec::new();
+
+    for device in config.serial_devices {
+        let device_config = device.clone(); // Clone the device config if necessary
+        let connection_task = tokio::spawn(async move {
+            manage_device(device_config).await
+        });
+        connections.push(connection_task);
+    }
+
+    // Await all connection tasks (this will run indefinitely if you design it that way)
+    for connection in connections {
+        connection.await??;
+    }
+
+
     Ok(())
+}
+
+async fn manage_device(device_config: SerialDeviceConfig) -> Result<()> {
+    let mut connection = AsyncSerialConnection::new(&device_config.port, device_config.baud_rate);
+    
+    loop {
+        match connection.ensure_port_open().await {
+            Ok(_) => {
+                // Process data or handle communication
+                let data = connection.read_data().await?;
+                println!("Received data from {}: {:?}", device_config.device_name, data);
+                // Process data or handle it as necessary
+            },
+            Err(e) => {
+                eprintln!("Error handling device {}: {}", device_config.device_name, e);
+                // Reconnect logic or error handling
+                tokio::time::sleep(tokio::time::Duration::from_secs(5)).await; // Wait before retrying
+            }
+        }
+    }
 }
