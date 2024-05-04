@@ -1,6 +1,6 @@
 use tokio_serial::{SerialStream, SerialPortBuilderExt};
 use tokio::io::AsyncReadExt;
-use std::path::Path;
+use serialport::SerialPort;
 
 pub struct AsyncSerialConnection {
     device_path: String,
@@ -17,8 +17,8 @@ impl AsyncSerialConnection {
         }
     }
 
-    async fn ensure_port_open(&mut self) -> Result<(), tokio_serial::Error> {
-        if self.port.is_none() || self.port.as_ref().unwrap().bytes_to_read().await.is_err() {
+    pub(crate) async fn ensure_port_open(&mut self) -> Result<(), tokio_serial::Error> {
+        if self.port.is_none() || self.port.as_ref().unwrap().bytes_to_read().is_err() {
             let port = tokio_serial::new(&self.device_path, self.baud_rate)
                 .open_native_async()?;
             self.port = Some(port);
