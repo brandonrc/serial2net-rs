@@ -1,0 +1,42 @@
+# default.toml
+
+[general]
+# Application general settings
+log_level = "info"  # Options: debug, info, warn, error
+
+[[serial_devices]]
+device_name = "Sensor1"
+port = "/dev/ttyS0"
+baud_rate = 9600
+data_bits = 8
+stop_bits = 1
+parity = "none"
+network_port = 30304
+
+[[serial_devices]]
+device_name = "Sensor2"
+port = "/dev/ttyS1"
+baud_rate = 19200
+data_bits = 8
+stop_bits = 1
+parity = "even"
+network_port = 30305
+
+
+[network]
+# Network settings for discovery and data transmission
+discovery_port = 30303          # UDP port to use for sending/receiving discovery messages
+broadcast_interval = 10         # Interval in seconds for sending discovery messages
+max_clients = 5                 # Maximum number of clients to handle simultaneously
+
+
+[discovery]
+# Discovery message settings
+device_id = "device123"        # Unique identifier for this device
+device_type = "sensor"         # Type of the device, e.g., sensor, controller
+discovery_message_lifetime = 30 # Time in seconds the discovery message is considered valid
+
+[security]
+# Security settings for connections and transmissions
+enable_encryption = false      # Toggle to enable/disable encryption
+encryption_key = "default_key" # Encryption key, if encryption is enabled

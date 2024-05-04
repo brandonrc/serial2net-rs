@@ -1,0 +1,24 @@
+[package]
+name = "serial2net"
+version = "0.1.0"
+edition = "2021"
+description = "A Rust application to bridge serial devices to the network via TCP/UDP."
+
+# Specify your workspace if you're using one
+# [workspace]
+# members = ["serial2net"]
+
+# Dependencies
+[dependencies]
+serde = { version = "1.0.200", features = ["derive"] }
+toml = "0.8.12"
+tokio = { version = "1.37.0", features = ["full"] }
+async-std = "1.12"
+clap = { version = "4.5.4", features = ["derive"]}
+serialport = "4.3.0"
+anyhow = "1.0.82"
+log = "0.4.21"
+env_logger = "0.11.3"
+
+# Optional dependencies (if you decide to use them later)
+# openssl = { version = "0.10", features = ["vendored"] }
