@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Added
 - UDP Broadcaster (Tokio Async Library)
 - TCP Handler (Tokio Async Library)
+- Initial UML/Diagram drawio to illustrate application
 
 ## [0.2.0] - 2024-05-04
 
