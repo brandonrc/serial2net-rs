@@ -26,6 +26,7 @@ pub struct SerialDeviceConfig {
     pub stop_bits: u8,
     pub parity: String,
     pub network_port: u16,
+    pub network_protocol: String,
 }
 
 #[derive(Debug, Deserialize)]

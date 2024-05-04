@@ -12,6 +12,7 @@ data_bits = 8
 stop_bits = 1
 parity = "none"
 network_port = 30304
+network_protocol = "tcp"
 
 [[serial_devices]]
 device_name = "Sensor2"
@@ -21,7 +22,7 @@ data_bits = 8
 stop_bits = 1
 parity = "even"
 network_port = 30305
-
+network_protocol = "udp"
 
 [network]
 # Network settings for discovery and data transmission

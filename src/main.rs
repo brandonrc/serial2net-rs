@@ -5,6 +5,7 @@ use log::{info, warn, error, debug, LevelFilter};
 use env_logger::{Env, Builder};
 use crate::config::SerialDeviceConfig;
 use crate::serial::AsyncSerialConnection;
+use tokio::join;
 
 mod serial;
 
@@ -88,15 +89,22 @@ async fn main() -> Result<()> {
     let mut connections = Vec::new();
 
     for device in config.serial_devices {
+        let device_config = device.clone();
         let connection_task = tokio::spawn(async move {
-            manage_device(device).await
+            manage_device(device_config).await
         });
         connections.push(connection_task);
     }
 
-    for connection in connections {
-        connection.await??;
+    // Run network service and serial device connections concurrently
+    let serial_results: Vec<_> = futures::future::join_all(connections).await;
+
+    for result in serial_results {
+        result??; // Handle or log errors as needed
     }
+    // for connection in connections {
+    //     connection.await??;
+    // }
 
     Ok(())
 }
@@ -127,7 +135,18 @@ async fn manage_device(device_config: SerialDeviceConfig) -> Result<()> {
                 // Process data or handle communication
                 let data = connection.read_data().await?;
                 println!("Received data from {}: {:?}", device_config.device_name, data);
-                // Process data or handle it as necessary
+                // Forward data to network service based on the protocol
+                match device_config.network_protocol.as_str() {
+                    "tcp" => {
+                        // Establish TCP connection and send data
+                        // Example: send_data_over_tcp(&device_config, &data).await?;
+                    },
+                    "udp" => {
+                        // Send data over UDP
+                        // Example: broadcast_data_over_udp(&device_config, &data).await?;
+                    },
+                    _ => eprintln!("Unsupported network protocol for device {}: {}", device_config.device_name, device_config.network_protocol),
+                }
             },
             Err(e) => {
                 eprintln!("Error handling device {}: {}", device_config.device_name, e);
